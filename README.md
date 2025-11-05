@@ -1,1 +1,2 @@
 # LearningSupportAndExamSys
+# Using MySQL DB

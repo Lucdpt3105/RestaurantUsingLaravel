@@ -34,24 +34,18 @@
                 
                 <!-- Menu -->
                 <div class="hidden md:flex space-x-8">
-                    <a href="#home" class="text-gray-700 hover:text-amber-600 transition">Trang chủ</a>
+                    <a href="/" class="text-gray-700 hover:text-amber-600 transition">Trang chủ</a>
                     <a href="#menu" class="text-gray-700 hover:text-amber-600 transition">Thực đơn</a>
                     <a href="#about" class="text-gray-700 hover:text-amber-600 transition">Giới thiệu</a>
                     <a href="#contact" class="text-gray-700 hover:text-amber-600 transition">Liên hệ</a>
+                    <a href="{{ route('menus.index') }}" class="text-gray-700 hover:text-amber-600 transition font-semibold">Quản lý Menu</a>
                 </div>
                 
                 <!-- Auth Buttons -->
                 <div class="flex items-center space-x-4">
-                    @if (Route::has('login'))
-                        @auth
-                            <a href="{{ url('/dashboard') }}" class="text-gray-700 hover:text-amber-600 transition">Dashboard</a>
-                        @else
-                            <a href="{{ route('login') }}" class="text-gray-700 hover:text-amber-600 transition">Đăng nhập</a>
-                            @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="bg-amber-600 text-white px-6 py-2 rounded-full hover:bg-amber-700 transition">Đăng ký</a>
-                            @endif
-                        @endauth
-                    @endif
+                    <a href="{{ route('menus.index') }}" class="bg-amber-600 text-white px-6 py-2 rounded-full hover:bg-amber-700 transition">
+                        Admin Panel
+                    </a>
                 </div>
             </div>
         </div>

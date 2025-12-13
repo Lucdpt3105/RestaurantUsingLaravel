@@ -1,6 +1,7 @@
-@extends('layouts.app')
+@extends('admin.layout')
 
-@section('title', 'Chỉnh Sửa Món - Santuy Restaurant')
+@section('title', 'Edit Menu Item')
+@section('page-title', 'Edit Menu Item')
 
 @section('content')
 <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">

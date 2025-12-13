@@ -1,13 +1,15 @@
-@extends('layouts.app')
+@extends('admin.layout')
 
-@section('title', 'Danh sách Menu - Santuy Restaurant')
+@section('title', 'Menu Items')
+@section('page-title', 'Menu Items')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-900">Quản Lý Menu</h1>
-        <a href="{{ route('menus.create') }}" class="bg-amber-600 text-white px-6 py-3 rounded-lg hover:bg-amber-700 transition">
-            + Thêm Món Mới
+<div class="mb-6">
+    <a href="{{ route('menus.create') }}" class="bg-amber-600 text-white px-6 py-3 rounded-lg hover:bg-amber-700 transition inline-flex items-center">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+        </svg>
+        Add New Menu Item
         </a>
     </div>
 

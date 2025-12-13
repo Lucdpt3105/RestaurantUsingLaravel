@@ -1,6 +1,7 @@
-@extends('layouts.app')
+@extends('admin.layout')
 
-@section('title', $menu->name . ' - Santuy Restaurant')
+@section('title', $menu->name)
+@section('page-title', 'Menu Item Details')
 
 @section('content')
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

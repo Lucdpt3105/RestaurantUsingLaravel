@@ -15,7 +15,9 @@ class PublicMenuController extends Controller
             ->get();
         
         $menus = Menu::with('category')
+            ->where('is_available', true)
             ->orderBy('sort_order')
+            ->orderBy('name')
             ->get();
         
         return view('menu', compact('categories', 'menus'));

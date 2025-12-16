@@ -34,9 +34,11 @@ class MenuController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
-            'category' => 'required|in:appetizer,main,dessert,drink',
+            'category_id' => 'required|exists:categories,id',
             'image_url' => 'nullable|url',
-            'is_available' => 'boolean'
+            'is_available' => 'boolean',
+            'is_featured' => 'boolean',
+            'sort_order' => 'nullable|integer|min:0'
         ]);
 
         Menu::create($validated);
@@ -71,9 +73,11 @@ class MenuController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
-            'category' => 'required|in:appetizer,main,dessert,drink',
+            'category_id' => 'required|exists:categories,id',
             'image_url' => 'nullable|url',
-            'is_available' => 'boolean'
+            'is_available' => 'boolean',
+            'is_featured' => 'boolean',
+            'sort_order' => 'nullable|integer|min:0'
         ]);
 
         $menu->update($validated);

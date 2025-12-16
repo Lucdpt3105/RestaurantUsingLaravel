@@ -7,6 +7,7 @@ use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\TeamMemberController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PublicMenuController;
 use App\Http\Controllers\PageController;
@@ -55,4 +56,5 @@ Route::prefix('admin')->group(function () {
     Route::resource('testimonials', TestimonialController::class);
     Route::resource('team', TeamMemberController::class);
     Route::resource('services', ServiceController::class);
+    Route::resource('contacts', ContactController::class)->only(['index', 'show', 'destroy']);
 });

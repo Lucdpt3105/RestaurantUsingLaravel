@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Gallery;
 use App\Models\TeamMember;
 use App\Models\Service;
+use App\Models\Contact;
+use App\Models\Testimonial;
 
 class PageController extends Controller
 {
@@ -51,13 +53,26 @@ class PageController extends Controller
 
     public function contact()
     {
-        return view('contact');
+        $contacts = Contact::where('is_read', true)
+            ->latest()
+            ->limit(6)
+            ->get();
+            
+        return view('contact', compact('contacts'));
     }
 
     public function contactStore(\Illuminate\Http\Request $request)
     {
-        // In a real app, you would send email or save to database
-        // For now, just return success
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'nullable|string|max:20',
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string',
+        ]);
+
+        Contact::create($validated);
+
         return redirect()->route('contact')->with('success', 'Thank you for your message! We will get back to you soon.');
     }
 }

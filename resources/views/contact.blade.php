@@ -129,6 +129,38 @@
                 </div>
             </div>
         </div>
+
+        <!-- Contact Messages Section -->
+        @if(isset($contacts) && $contacts->isNotEmpty())
+        <div class="mt-20">
+            <div class="text-center mb-12">
+                <p class="section-subtitle mb-4">Messages</p>
+                <h2 class="section-title">Recent Customer Messages</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                @foreach($contacts as $contact)
+                <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition">
+                    <div class="flex items-center mb-4">
+                        <div class="w-16 h-16 rounded-full bg-primary-color flex items-center justify-center mr-4 text-white text-xl font-bold">
+                            {{ strtoupper(substr($contact->name, 0, 1)) }}
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">{{ $contact->name }}</h4>
+                            <p class="text-gray-600 text-sm">{{ $contact->created_at->format('M d, Y') }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <p class="font-semibold text-primary-color">{{ $contact->subject }}</p>
+                    </div>
+                    
+                    <p class="text-gray-600">{{ Str::limit($contact->message, 150) }}</p>
+                </div>
+                @endforeach
+            </div>
+        </div>
+        @endif
     </div>
 </section>
 @endsection

@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Testimonial;
+use App\Models\Contact;
 use Illuminate\Http\Request;
 
 class TestimonialController extends Controller
 {
     public function index()
     {
-        $testimonials = Testimonial::orderBy('sort_order')->paginate(15);
-        return view('admin.testimonials.index', compact('testimonials'));
+        $contacts = Contact::latest()->paginate(15);
+        return view('admin.testimonials.index', compact('contacts'));
     }
 
     public function create()

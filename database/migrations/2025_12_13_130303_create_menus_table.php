@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->decimal('price', 10, 2);
-            $table->string('category')->default('main'); // appetizer, main, dessert, drink - keep for backward compatibility
             $table->string('image_url')->nullable();
             $table->boolean('is_featured')->default(false);
             $table->boolean('is_available')->default(true);

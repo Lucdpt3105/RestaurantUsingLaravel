@@ -41,12 +41,12 @@ class TeamMemberController extends Controller
 
     public function show(TeamMember $team)
     {
-        return view('admin.team.show', compact('team'));
+        return view('admin.team.show', ['teamMember' => $team]);
     }
 
     public function edit(TeamMember $team)
     {
-        return view('admin.team.edit', compact('team'));
+        return view('admin.team.edit', ['teamMember' => $team]);
     }
 
     public function update(Request $request, TeamMember $team)

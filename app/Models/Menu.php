@@ -11,7 +11,6 @@ class Menu extends Model
         'name',
         'description',
         'price',
-        'category',
         'image_url',
         'is_featured',
         'is_available',

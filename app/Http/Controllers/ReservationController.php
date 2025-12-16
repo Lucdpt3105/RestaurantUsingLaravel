@@ -35,6 +35,33 @@ class ReservationController extends Controller
 
         return redirect()->route('reservations.index')->with('success', 'Reservation created successfully!');
     }
+    
+    // Public reservation submission
+    public function publicStore(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
+            'date' => 'required|date|after_or_equal:today',
+            'time' => 'required',
+            'guests' => 'required|integer|min:1|max:20',
+            'requests' => 'nullable|string',
+        ]);
+
+        Reservation::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'date' => $validated['date'],
+            'time' => $validated['time'],
+            'guests' => $validated['guests'],
+            'special_requests' => $validated['requests'] ?? null,
+            'status' => 'pending',
+        ]);
+
+        return redirect()->route('reservation')->with('success', 'Your reservation has been submitted successfully! We will contact you shortly to confirm.');
+    }
 
     public function show(Reservation $reservation)
     {

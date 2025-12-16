@@ -12,8 +12,8 @@ class MenuController extends Controller
      */
     public function index()
     {
-        $menus = Menu::latest()->paginate(10);
-        return view('menus.index', compact('menus'));
+        $menus = Menu::with('category')->latest()->paginate(15);
+        return view('admin.menus.index', compact('menus'));
     }
 
     /**
@@ -21,7 +21,8 @@ class MenuController extends Controller
      */
     public function create()
     {
-        return view('menus.create');
+        $categories = \App\Models\Category::where('is_active', true)->orderBy('name')->get();
+        return view('admin.menus.create', compact('categories'));
     }
 
     /**
@@ -57,7 +58,8 @@ class MenuController extends Controller
      */
     public function edit(Menu $menu)
     {
-        return view('menus.edit', compact('menu'));
+        $categories = \App\Models\Category::where('is_active', true)->orderBy('name')->get();
+        return view('admin.menus.edit', compact('menu', 'categories'));
     }
 
     /**

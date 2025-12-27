@@ -116,6 +116,12 @@
                     
                     <!-- User Actions -->
                     <div class="hidden lg:flex items-center gap-4">
+                        <!-- Cart Icon -->
+                        <button id="cart-button" class="relative hover:text-primary-color transition">
+                            <i class="fas fa-shopping-cart text-2xl"></i>
+                            <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">0</span>
+                        </button>
+                        
                         @auth
                             <a href="{{ route('user.dashboard') }}" class="flex items-center gap-2 hover:text-primary-color transition font-medium">
                                 <i class="far fa-user"></i>
@@ -165,6 +171,48 @@
     <main>
         @yield('content')
     </main>
+
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            <div class="flex justify-between items-center p-6 border-b">
+                <h2 class="text-2xl font-bold" style="font-family: 'Cormorant', serif;">Giỏ hàng của bạn</h2>
+                <button id="close-cart" class="text-gray-500 hover:text-gray-700 text-3xl">&times;</button>
+            </div>
+            
+            <div id="cart-items" class="flex-1 overflow-y-auto p-6">
+                <!-- Cart items will be dynamically loaded here -->
+                <div class="text-center text-gray-500 py-8">
+                    Giỏ hàng của bạn đang trống
+                </div>
+            </div>
+            
+            <div class="border-t p-6 bg-gray-50">
+                <div class="space-y-2 mb-4">
+                    <div class="flex justify-between text-gray-600">
+                        <span>Tạm tính:</span>
+                        <span id="cart-subtotal">0 đ</span>
+                    </div>
+                    <div class="flex justify-between text-gray-600">
+                        <span>Thuế (10%):</span>
+                        <span id="cart-tax">0 đ</span>
+                    </div>
+                    <div class="flex justify-between text-xl font-bold">
+                        <span>Tổng cộng:</span>
+                        <span id="cart-total" class="text-primary-color">0 đ</span>
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <button id="clear-cart" class="flex-1 px-4 py-3 border border-gray-300 hover:bg-gray-100 transition">
+                        Xóa giỏ hàng
+                    </button>
+                    <button id="checkout-btn" class="flex-1 btn-primary rounded-none">
+                        Thanh toán
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <!-- Footer -->
     <footer class="bg-dark-color text-white pt-20 pb-8">
@@ -262,6 +310,213 @@
                 header.querySelector('nav').classList.remove('py-2');
             }
         });
+        
+        // Cart functionality
+        const cartModal = document.getElementById('cart-modal');
+        const cartButton = document.getElementById('cart-button');
+        const closeCart = document.getElementById('close-cart');
+        const cartCount = document.getElementById('cart-count');
+        const cartItems = document.getElementById('cart-items');
+        const cartSubtotal = document.getElementById('cart-subtotal');
+        const cartTax = document.getElementById('cart-tax');
+        const cartTotal = document.getElementById('cart-total');
+        const checkoutBtn = document.getElementById('checkout-btn');
+        const clearCartBtn = document.getElementById('clear-cart');
+        
+        // Open cart modal
+        cartButton.addEventListener('click', function() {
+            loadCart();
+            cartModal.classList.remove('hidden');
+            cartModal.style.display = 'flex';
+        });
+        
+        // Close cart modal
+        closeCart.addEventListener('click', function() {
+            cartModal.classList.add('hidden');
+            cartModal.style.display = 'none';
+        });
+        
+        // Close cart when clicking outside
+        cartModal.addEventListener('click', function(e) {
+            if (e.target === cartModal) {
+                cartModal.classList.add('hidden');
+                cartModal.style.display = 'none';
+            }
+        });
+        
+        // Add to cart function
+        window.addToCart = function(menuId, quantity = 1) {
+            fetch('/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                },
+                body: JSON.stringify({
+                    menu_id: menuId,
+                    quantity: quantity
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    cartCount.textContent = data.cartCount;
+                    showNotification('Đã thêm vào giỏ hàng!', 'success');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('Có lỗi xảy ra!', 'error');
+            });
+        };
+        
+        // Load cart
+        function loadCart() {
+            fetch('/cart/get')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateCartDisplay(data.cartData);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+        
+        // Update cart display
+        function updateCartDisplay(cartData) {
+            cartCount.textContent = cartData.count;
+            
+            if (cartData.items.length === 0) {
+                cartItems.innerHTML = '<div class="text-center text-gray-500 py-8">Giỏ hàng của bạn đang trống</div>';
+                checkoutBtn.disabled = true;
+                return;
+            }
+            
+            checkoutBtn.disabled = false;
+            
+            let itemsHTML = '';
+            cartData.items.forEach(item => {
+                itemsHTML += `
+                    <div class="flex gap-4 mb-4 pb-4 border-b">
+                        <img src="${item.image_url || '/images/default-food.jpg'}" alt="${item.name}" class="w-20 h-20 object-cover rounded">
+                        <div class="flex-1">
+                            <h4 class="font-semibold">${item.name}</h4>
+                            <p class="text-primary-color">${formatCurrency(item.price)}</p>
+                            <div class="flex items-center gap-2 mt-2">
+                                <button onclick="updateCartQuantity(${item.id}, ${item.quantity - 1})" class="px-2 py-1 border">-</button>
+                                <span>${item.quantity}</span>
+                                <button onclick="updateCartQuantity(${item.id}, ${item.quantity + 1})" class="px-2 py-1 border">+</button>
+                                <button onclick="removeFromCart(${item.id})" class="ml-auto text-red-500 hover:text-red-700">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            cartItems.innerHTML = itemsHTML;
+            cartSubtotal.textContent = formatCurrency(cartData.subtotal);
+            cartTax.textContent = formatCurrency(cartData.tax);
+            cartTotal.textContent = formatCurrency(cartData.total);
+        }
+        
+        // Update cart quantity
+        window.updateCartQuantity = function(itemId, quantity) {
+            if (quantity < 1) {
+                removeFromCart(itemId);
+                return;
+            }
+            
+            fetch('/cart/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                },
+                body: JSON.stringify({
+                    item_id: itemId,
+                    quantity: quantity
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateCartDisplay(data.cartData);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        };
+        
+        // Remove from cart
+        window.removeFromCart = function(itemId) {
+            fetch('/cart/remove', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                },
+                body: JSON.stringify({
+                    item_id: itemId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateCartDisplay(data.cartData);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        };
+        
+        // Clear cart
+        clearCartBtn.addEventListener('click', function() {
+            if (!confirm('Bạn có chắc muốn xóa toàn bộ giỏ hàng?')) return;
+            
+            fetch('/cart/clear', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    loadCart();
+                    showNotification('Đã xóa giỏ hàng!', 'success');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+        
+        // Checkout
+        checkoutBtn.addEventListener('click', function() {
+            window.location.href = '/checkout';
+        });
+        
+        // Format currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(amount);
+        }
+        
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-20 right-4 px-6 py-3 rounded shadow-lg z-50 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Load cart count on page load
+        loadCart();
     </script>
     
     @stack('scripts')

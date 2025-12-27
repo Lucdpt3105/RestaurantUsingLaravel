@@ -13,6 +13,8 @@ use App\Http\Controllers\PublicMenuController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\User\DashboardController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 // Public Routes
@@ -28,6 +30,18 @@ Route::get('/reservation', function () {
     return view('reservation');
 })->name('reservation');
 Route::post('/reservation', [ReservationController::class, 'publicStore']);
+
+// Cart Routes
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+Route::get('/cart/get', [CartController::class, 'get'])->name('cart.get');
+
+// Order Routes
+Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout');
+Route::post('/order', [OrderController::class, 'store'])->name('order.store');
+Route::get('/order/success/{orderNumber}', [OrderController::class, 'success'])->name('order.success');
 
 // Authentication Routes
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');

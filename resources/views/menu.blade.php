@@ -72,6 +72,10 @@
                             </svg>
                             Available
                         </span>
+                        <button onclick="addToCart({{ $menu->id }})" class="btn-primary rounded-full px-6 py-2 text-sm">
+                            <i class="fas fa-shopping-cart mr-2"></i>
+                            Add to Cart
+                        </button>
                         @else
                         <span class="flex items-center text-red-600 text-sm">
                             <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">

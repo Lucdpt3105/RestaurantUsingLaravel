@@ -48,7 +48,12 @@ class PageController extends Controller
             ->orderBy('sort_order')
             ->get();
         
-        return view('services', compact('services'));
+        $testimonials = Testimonial::where('is_active', true)
+            ->orderBy('sort_order')
+            ->limit(6)
+            ->get();
+        
+        return view('services', compact('services', 'testimonials'));
     }
 
     public function contact()

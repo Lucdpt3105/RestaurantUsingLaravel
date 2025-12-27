@@ -17,7 +17,7 @@
         @endif
 
         <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
             <div class="bg-white rounded-lg shadow-lg p-6">
                 <div class="flex items-center">
                     <div class="flex-shrink-0 bg-blue-100 rounded-full p-3">
@@ -48,21 +48,141 @@
 
             <div class="bg-white rounded-lg shadow-lg p-6">
                 <div class="flex items-center">
-                    <div class="flex-shrink-0 bg-amber-100 rounded-full p-3">
-                        <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    <div class="flex-shrink-0 bg-purple-100 rounded-full p-3">
+                        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <p class="text-gray-500 text-sm">Completed</p>
-                        <p class="text-2xl font-bold text-gray-800">{{ $stats['completed'] }}</p>
+                        <p class="text-gray-500 text-sm">Total Orders</p>
+                        <p class="text-2xl font-bold text-gray-800">{{ $stats['total_orders'] }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 bg-amber-100 rounded-full p-3">
+                        <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-gray-500 text-sm">Total Spent</p>
+                        <p class="text-2xl font-bold text-gray-800">{{ number_format($stats['total_spent'], 0, ',', '.') }} đ</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Reservations Table -->
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <!-- Tabs -->
+        <div class="mb-6">
+            <div class="border-b border-gray-200">
+                <nav class="-mb-px flex space-x-8">
+                    <button onclick="switchTab('orders')" id="tab-orders" class="tab-button border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                        <i class="fas fa-shopping-bag mr-2"></i>
+                        My Orders
+                    </button>
+                    <button onclick="switchTab('reservations')" id="tab-reservations" class="tab-button border-primary-color text-primary-color whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                        <i class="fas fa-calendar-alt mr-2"></i>
+                        My Reservations
+                    </button>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Orders Section -->
+        <div id="orders-section" class="tab-content hidden">
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">Order History</h2>
+                </div>
+
+                @if($orders->isEmpty())
+                    <div class="text-center py-12">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                        </svg>
+                        <h3 class="mt-2 text-sm font-medium text-gray-900">No orders yet</h3>
+                        <p class="mt-1 text-sm text-gray-500">Start ordering from our delicious menu.</p>
+                        <div class="mt-6">
+                            <a href="{{ route('menu') }}" class="btn-primary px-6 py-2 rounded-lg">
+                                Browse Menu
+                            </a>
+                        </div>
+                    </div>
+                @else
+                    <div class="divide-y divide-gray-200">
+                        @foreach($orders as $order)
+                        <div class="p-6 hover:bg-gray-50 transition">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-900">Order #{{ $order->order_number }}</h3>
+                                    <p class="text-sm text-gray-500">{{ $order->created_at->format('M d, Y - h:i A') }}</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xl font-bold text-primary-color">{{ number_format($order->total, 0, ',', '.') }} đ</p>
+                                    <div class="mt-1">
+                                        @if($order->order_status === 'pending')
+                                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
+                                        @elseif($order->order_status === 'processing')
+                                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Processing</span>
+                                        @elseif($order->order_status === 'completed')
+                                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
+                                        @else
+                                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Cancelled</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <p class="text-sm text-gray-600 mb-2"><strong>Items:</strong></p>
+                                <div class="space-y-2">
+                                    @foreach($order->items as $item)
+                                        <div class="flex justify-between text-sm">
+                                            <span class="text-gray-700">{{ $item->menu_name }} × {{ $item->quantity }}</span>
+                                            <span class="text-gray-900">{{ number_format($item->subtotal, 0, ',', '.') }} đ</span>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm">
+                                    <span class="text-gray-600">Payment: </span>
+                                    <span class="font-medium">
+                                        @if($order->payment_method === 'cash')
+                                            Cash on Delivery
+                                        @elseif($order->payment_method === 'card')
+                                            Card
+                                        @else
+                                            Bank Transfer
+                                        @endif
+                                    </span>
+                                    @if($order->payment_status === 'paid')
+                                        <span class="ml-2 text-green-600">✓ Paid</span>
+                                    @else
+                                        <span class="ml-2 text-yellow-600">Pending</span>
+                                    @endif
+                                </div>
+                                <a href="{{ route('user.order.detail', $order->order_number) }}" class="text-primary-color hover:underline text-sm font-medium">
+                                    View Details →
+                                </a>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+
+                    <div class="px-6 py-4 bg-gray-50">
+                        {{ $orders->links() }}
+                    </div>
+                @endif
+            </div>
+        </div>
+
+        <!-- Reservations Section -->
+        <div id="reservations-section" class="tab-content">
             <div class="px-6 py-4 border-b border-gray-200">
                 <h2 class="text-xl font-bold text-gray-800">My Reservations</h2>
             </div>
@@ -160,3 +280,32 @@
     </div>
 </section>
 @endsection
+
+@push('scripts')
+<script>
+    function switchTab(tab) {
+        // Hide all tab content
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.add('hidden');
+        });
+        
+        // Remove active state from all tabs
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.classList.remove('border-primary-color', 'text-primary-color');
+            button.classList.add('border-transparent', 'text-gray-500');
+        });
+        
+        // Show selected tab content
+        document.getElementById(tab + '-section').classList.remove('hidden');
+        
+        // Add active state to selected tab
+        document.getElementById('tab-' + tab).classList.remove('border-transparent', 'text-gray-500');
+        document.getElementById('tab-' + tab).classList.add('border-primary-color', 'text-primary-color');
+    }
+    
+    // Initialize - show orders tab by default
+    document.addEventListener('DOMContentLoaded', function() {
+        switchTab('orders');
+    });
+</script>
+@endpush

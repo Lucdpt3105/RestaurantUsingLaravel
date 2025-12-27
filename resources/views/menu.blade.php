@@ -14,8 +14,51 @@
             </p>
         </div>
         
+        <!-- Filter and Search Bar -->
+        <div class="max-w-4xl mx-auto mb-12">
+            <form method="GET" action="{{ route('menu') }}" class="bg-white rounded-lg shadow-md p-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Search Bar -->
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Search Menu</label>
+                        <div class="relative">
+                            <input type="text" 
+                                   name="search" 
+                                   value="{{ request('search') }}"
+                                   placeholder="Search by name or description..." 
+                                   class="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-color focus:border-transparent">
+                            <i class="fas fa-search absolute right-3 top-4 text-gray-400"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Category Dropdown -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                        <select name="category" 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-color focus:border-transparent">
+                            <option value="">All Categories</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="flex gap-3 mt-4">
+                    <button type="submit" class="btn-primary rounded-lg px-6 py-2">
+                        <i class="fas fa-filter mr-2"></i>Apply Filters
+                    </button>
+                    <a href="{{ route('menu') }}" class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                        <i class="fas fa-redo mr-2"></i>Reset
+                    </a>
+                </div>
+            </form>
+        </div>
+        
         <!-- Category Filter -->
-        <div class="flex justify-center gap-4 mb-12 flex-wrap">
+        <div class="flex justify-center gap-4 mb-12 flex-wrap hidden">
             <button class="category-filter active px-8 py-3 rounded-full font-medium transition shadow-md" data-category="all">
                 All Menu
             </button>
@@ -117,68 +160,9 @@
 
 @push('scripts')
 <script>
-    // Menu filtering
-    const filterButtons = document.querySelectorAll('.category-filter');
-    const menuItems = document.querySelectorAll('.menu-item');
-    
-    filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const category = button.dataset.category;
-            
-            // Update active state
-            filterButtons.forEach(btn => {
-                btn.classList.remove('active', 'bg-primary-color', 'text-white');
-                btn.classList.add('bg-white', 'text-gray-700');
-            });
-            button.classList.add('active', 'bg-primary-color', 'text-white');
-            button.classList.remove('bg-white', 'text-gray-700');
-            
-            // Filter items with animation
-            menuItems.forEach(item => {
-                if (category === 'all' || item.dataset.category === category) {
-                    item.style.display = 'block';
-                    item.style.animation = 'fadeIn 0.5s';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        });
+    // Auto submit form when category changes
+    document.querySelector('select[name="category"]').addEventListener('change', function() {
+        this.form.submit();
     });
-    
-    // Initialize first button as active
-    if (filterButtons.length > 0) {
-        filterButtons[0].classList.add('bg-primary-color', 'text-white');
-        filterButtons[0].classList.remove('bg-white', 'text-gray-700');
-    }
 </script>
-
-<style>
-    .category-filter {
-        background-color: white;
-        color: var(--text-color);
-        border: 2px solid transparent;
-    }
-    
-    .category-filter:hover {
-        border-color: var(--primary-color);
-        color: var(--primary-color);
-    }
-    
-    .category-filter.active {
-        background-color: var(--primary-color);
-        color: white;
-        border-color: var(--primary-color);
-    }
-    
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-</style>
 @endpush

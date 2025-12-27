@@ -53,6 +53,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // User Dashboard Routes
 Route::middleware('auth')->prefix('user')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('user.dashboard');
+    Route::get('/order/{orderNumber}', [DashboardController::class, 'showOrder'])->name('user.order.detail');
 });
 
 // Admin Panel Routes

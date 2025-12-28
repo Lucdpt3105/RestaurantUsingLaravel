@@ -5,11 +5,17 @@ namespace Database\Seeders;
 use App\Models\Menu;
 use App\Models\Category;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class MenuSeeder extends Seeder
 {
     public function run(): void
     {
+        // Tắt foreign key checks tạm thời để xóa dữ liệu
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        Menu::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        
         $coffee = Category::where('name', 'Coffee')->first();
         $food = Category::where('name', 'Food')->first();
         $desserts = Category::where('name', 'Desserts')->first();
@@ -216,7 +222,7 @@ class MenuSeeder extends Seeder
                 'name' => 'Cheesecake',
                 'description' => 'Creamy New York style cheesecake with berry compote',
                 'price' => 58000,
-                'image_url' => 'https://images.unsplash.com/photo-1533134486753-c833f0ed4866?w=400',
+                'image_url' => 'https://i.pinimg.com/1200x/55/c5/c8/55c5c84f8bbacb8697cfff54cec1c20c.jpg',
                 'is_available' => true,
                 'is_featured' => true,
                 'sort_order' => 3,
@@ -308,7 +314,7 @@ class MenuSeeder extends Seeder
                 'name' => 'Coconut Water',
                 'description' => 'Fresh young coconut water served chilled',
                 'price' => 32000,
-                'image_url' => 'https://images.unsplash.com/photo-1585154182904-f517a9d00e67?w=400',
+                'image_url' => 'https://i.pinimg.com/736x/a0/d1/e5/a0d1e5b61f0d39bff1d81ec809522c5b.jpg',
                 'is_available' => true,
                 'is_featured' => false,
                 'sort_order' => 6,

@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@300;400;500;600;700&family=Josefin+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -60,10 +61,11 @@
         
         .section-subtitle {
             color: var(--primary-color);
-            font-size: 0.9rem;
+            font-size: 2.25rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             font-weight: 500;
+            font-family: 'Montserrat', sans-serif;
         }
     </style>
     
@@ -73,23 +75,43 @@
     
     <!-- Header -->
     <header class="fixed w-full top-0 z-50 transition-all duration-300" id="header">
-        <!-- Top Bar -->
-        <div class="bg-dark-color text-white py-3">
+        <!-- Top Bar with Glassmorphism -->
+        <div class="py-1.5 relative" style="background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid rgba(199, 161, 122, 0.2);">
             <div class="container mx-auto px-4">
                 <div class="flex justify-between items-center text-sm">
-                    <div class="flex items-center gap-2">
-                        <i class="far fa-clock text-primary-color"></i>
-                        <span>Opening Hours: 08:00 AM - 09:00 PM</span>
+                    <div class="flex items-center gap-2 text-white">
+                        <i class="far fa-clock text-xl" style="color: #c7a17a;"></i>
+                        <span class="font-medium">Opening Hours: <strong style="color: #fbbf24;">08:00 AM - 09:00 PM</strong></span>
                     </div>
-                    <div class="hidden md:flex gap-4">
-                        <a href="#" class="hover:text-primary-color transition"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="hover:text-primary-color transition"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="hover:text-primary-color transition"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="hover:text-primary-color transition"><i class="fab fa-youtube"></i></a>
+                    <div class="hidden md:flex gap-3">
+                        <a href="#" class="w-9 h-9 rounded-full flex items-center justify-center text-white transition-all duration-300" 
+                           style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(199, 161, 122, 0.3); box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);"
+                           onmouseover="this.style.background='rgba(199, 161, 122, 0.8)'; this.style.transform='translateY(-2px) scale(1.05)'; this.style.boxShadow='0 6px 12px rgba(199, 161, 122, 0.4)'"
+                           onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'; this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 6px rgba(0, 0, 0, 0.1)'">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-9 h-9 rounded-full flex items-center justify-center text-white transition-all duration-300" 
+                           style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(199, 161, 122, 0.3); box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);"
+                           onmouseover="this.style.background='rgba(199, 161, 122, 0.8)'; this.style.transform='translateY(-2px) scale(1.05)'; this.style.boxShadow='0 6px 12px rgba(199, 161, 122, 0.4)'"
+                           onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'; this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 6px rgba(0, 0, 0, 0.1)'">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-9 h-9 rounded-full flex items-center justify-center text-white transition-all duration-300" 
+                           style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(199, 161, 122, 0.3); box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);"
+                           onmouseover="this.style.background='rgba(199, 161, 122, 0.8)'; this.style.transform='translateY(-2px) scale(1.05)'; this.style.boxShadow='0 6px 12px rgba(199, 161, 122, 0.4)'"
+                           onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'; this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 6px rgba(0, 0, 0, 0.1)'">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-9 h-9 rounded-full flex items-center justify-center text-white transition-all duration-300" 
+                           style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(199, 161, 122, 0.3); box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);"
+                           onmouseover="this.style.background='rgba(199, 161, 122, 0.8)'; this.style.transform='translateY(-2px) scale(1.05)'; this.style.boxShadow='0 6px 12px rgba(199, 161, 122, 0.4)'"
+                           onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'; this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 6px rgba(0, 0, 0, 0.1)'">
+                            <i class="fab fa-youtube"></i>
+                        </a>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <i class="fas fa-phone-alt text-primary-color"></i>
-                        <span>+84 123 456 789</span>
+                    <div class="flex items-center gap-2 text-white">
+                        <i class="fas fa-phone-alt text-xl" style="color: #c7a17a;"></i>
+                        <span class="font-medium"><strong style="color: #fbbf24;">+84 123 456 789</strong></span>
                     </div>
                 </div>
             </div>

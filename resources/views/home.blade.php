@@ -14,7 +14,7 @@
                     <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1920'); filter: brightness(0.7);"></div>
                     <div class="relative container mx-auto px-4 h-full flex items-center">
                         <div class="text-white max-w-2xl">
-                            <p class="section-subtitle text-primary-color mb-4">Welcome to Santuy</p>
+                            <p class="section-subtitle text-primary-color mb-4" style="font-size: 2.25rem;">Welcome to Santuy</p>
                             <h1 class="text-6xl md:text-7xl font-bold mb-6" style="font-family: 'Cormorant', serif;">Reserve Your<br>Table Today</h1>
                             <div class="flex gap-4">
                                 <a href="/menu" class="btn-primary rounded-none">Explore Menu</a>

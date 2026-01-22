@@ -170,26 +170,4 @@ SantuyProject/
   - Chưa chạy: `php artisan key:generate`
 
 ---
-
-## 👥 Team
-
-- **Luc Dang** - [GitHub](https://github.com/Lucdpt3105)
-- *Thêm tên các thành viên khác ở đây*
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-Project for educational purposes only (NMCNPM - 2025).
-
----
-
-## 🆘 Support
-
-Nếu gặp vấn đề, vui lòng:
-- Kiểm tra phần Troubleshooting
-- Tạo issue trên GitHub
-- Liên hệ team members
-
-**Happy Coding! 🚀**
+ing! 🚀**
